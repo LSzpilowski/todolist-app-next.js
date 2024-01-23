@@ -1,12 +1,14 @@
 import { Header } from "./components/Header";
-import { AddTasks } from "./components/Tasks/AddTasks/AddTasks";
+import { Tasks } from './components/Tasks'
+
+
 
 export const App = () => {
   return (
-   <>
-   <Header />
-   <AddTasks/>
-   </>
+  <>
+    <Header />
+    <Tasks />
+  </>
   );
 }
 
