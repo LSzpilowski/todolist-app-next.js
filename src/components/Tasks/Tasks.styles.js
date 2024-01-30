@@ -31,7 +31,7 @@ export const InputText = styled.input.attrs({
   id:'inputText',
   placeholder:'What to do today?',
   minLength: '3',
-  maxLength: '100',
+  maxLength: '70',
   required: true,
 })`
 font-size: 2em;
@@ -229,6 +229,7 @@ margin: 0;
 
 border: 2px solid #005BA4;
 
+min-height: 40px;
 max-height: 360px;
 padding-bottom: 10px;
 
