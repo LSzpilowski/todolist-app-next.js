@@ -2,6 +2,8 @@ import React from "react";
 import { useState } from "react";
 import * as S from "./Tasks.styles";
 
+import { DropdownMenu } from "./DisplayTasks/DropdownMenu/DropdownMenu";
+
 export const Tasks = () => {
   const [dones, setDones] = useState([]);
   const [todos, setTodos] = useState([]);
@@ -93,14 +95,12 @@ export const Tasks = () => {
   }
 
   function handleEditKeyPress(e) {
-  if (e.key === 'Enter') {
-    handleEditSave();
-  } else if (e.key === 'Escape') {
-    handleEditCancel();
+    if (e.key === "Enter") {
+      handleEditSave();
+    } else if (e.key === "Escape") {
+      handleEditCancel();
+    }
   }
-}
-
-
 
   const onToggle = () => setIsToggled(!isToggled);
 
@@ -122,44 +122,31 @@ export const Tasks = () => {
           <S.UnorderdList>
             {todos.map((todo, index) => (
               <S.LiToDoTasks key={index}>
-                <S.TodoContainer>
-                  {editingIndex === index ? (
-                    <S.InputEdit
-                      value={editingText}
-                      onChange={(e) => setEditingText(e.target.value)}
-                      onKeyUp={handleEditKeyPress}
-                    />
-                  ) : (
-                    <S.ToDoTask>
-                      {index + 1 + ". "}
-                      {todo.text}
-                    </S.ToDoTask>
-                  )}
-                  <S.Buttons>
-                    {editingIndex === index ? (
-                      <>
-                        <S.Button onClick={handleEditSave}>
-                          Save
-                        </S.Button>
-                        <S.Button onClick={handleEditCancel}>
-                          Cancel
-                        </S.Button>
-                      </>
-                    ) : (
-                      <>
-                        <S.Button onClick={() => handleEditStart(index)}>
-                          Edit
-                        </S.Button>
-                        <S.Button onClick={() => handleDone(index)}>
-                          Done
-                        </S.Button>
-                        <S.Button onClick={() => handleDelete(index)} >
-                          Delete
-                        </S.Button>
-                      </>
-                    )}
-                  </S.Buttons>
-                </S.TodoContainer>
+                 <S.TodoContainer>
+    {editingIndex === index ? (
+      <>
+        <S.InputEdit
+          value={editingText}
+          onChange={(e) => setEditingText(e.target.value)}
+          onKeyUp={handleEditKeyPress}
+        />
+        <S.Button onClick={handleEditSave}>Save</S.Button>
+        <S.Button onClick={handleEditCancel}>Cancel</S.Button>
+      </>
+    ) : (
+      <>
+        <S.ToDoTask>
+          {index + 1 + ". "}
+          {todo.text}
+        </S.ToDoTask>
+        <DropdownMenu
+          onEdit={() => handleEditStart(index)}
+          onDone={() => handleDone(index)}
+          onDelete={() => handleDelete(index)}
+        />
+      </>
+    )}
+  </S.TodoContainer>
               </S.LiToDoTasks>
             ))}
           </S.UnorderdList>
@@ -187,15 +174,15 @@ export const Tasks = () => {
         </S.Fieldset>
       </S.DisplayTasks>
 
-      <S.TaskHistory hasItems={historyTasks.length > 0} >
+      <S.TaskHistory hasItems={historyTasks.length > 0}>
         <S.Legend>
           <S.LegendText>Your Task History</S.LegendText>
           {latestHistoryTasks.length > 0 && (
             <>
-            <S.HideShowButton id="toggle" onClick={onToggle}>
-              {!isToggled ? "Hide" : "Show"}
-            </S.HideShowButton>
-            <S.ClearButton onClick={handleClearHistory}>Clear</S.ClearButton>
+              <S.HideShowButton id="toggle" onClick={onToggle}>
+                {!isToggled ? "Hide" : "Show"}
+              </S.HideShowButton>
+              <S.ClearButton onClick={handleClearHistory}>Clear</S.ClearButton>
             </>
           )}
         </S.Legend>

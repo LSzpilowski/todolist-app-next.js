@@ -125,8 +125,7 @@ border-radius: 10px;
 
 &:hover {
     color: white;
-    background: #115CA9;
-    font-weight: bold;
+    background: blue;
 `;
 
 export const TodoContainer = styled.div`
@@ -321,3 +320,29 @@ width: 100%;
 overflow: hidden;
 `;
 
+
+
+export const MenuContainer = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+export const DotsButton = styled.button`
+  /* Add styles for your dots button here */
+`;
+
+export const Menu = styled.div`
+  position: absolute;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  z-index: 1;
+`;
+
+export const MenuItem = styled.div`
+  padding: 8px 12px;
+  cursor: pointer;
+  &:hover {
+    background-color: #f5f5f5;
+  }
+`;
