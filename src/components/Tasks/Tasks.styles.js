@@ -14,9 +14,6 @@ padding: 0;
 
 
 
-
-
-
 // AddTasks
 export const AddTask = styled.form.attrs({
   autoComplete: 'off',
@@ -39,9 +36,6 @@ border-radius: 7px;
 border: 1px solid #005BA4;
 padding: 0px 20px;
 
-&:hover {
-  background-color: lightblue;
-  transition: 200ms ease-in-out;
 }
 `;
 
@@ -54,10 +48,14 @@ font-size: 2em;
 border-radius: 7px;
 border: 1px solid #005BA4;
 padding: 0px 20px;
+max-width: 176px;
+background-color: blue;
+color: white;
+transition: 200ms ease-in-out;
+opacity: 0.7;
 
 &:hover {
-  background-color: lightblue;
-  transition: 200ms ease-in-out;
+  opacity: 1;
 }
 `;
 
@@ -70,7 +68,7 @@ padding: 0px 20px;
 
 export const DisplayTasks = styled.div`
 width: 90%;
-height: 60vh;
+
 padding: 15px;
 
 display: flex;
@@ -83,16 +81,19 @@ width: 50%;
 max-width: 600px;
 min-height: 300px;
 max-height: 450px;
+
 overflow: auto;
-border: 2px solid #005BA4;
-background-color: lightblue;
+
+border: 1px solid #005BA4;
+border-radius: 10px;
+background-color: #F1F2F4;
+box-sizing: border-box;
 `;
 
 export const Legend = styled.legend`
 background-color: transparent;
-font-size: 25px;
+font-size: 2em;
 font-weight: bold;
-
 transition: 300ms ease-in-out;
 `;
 
@@ -100,14 +101,13 @@ transition: 300ms ease-in-out;
 
 
 export const UnorderdList = styled.ul`
-display: flex;
-flex-direction: column;
-justify-content: center;
-
-max-height: inherit;
+box-sizing: border-box;
 font-size: 1.5em;
-padding: 0;
+padding: 5px;
 margin: 0;
+min-height: 250px;
+max-height: 380px;
+
 `;
 
 export const LiToDoTasks = styled.li`
@@ -116,16 +116,14 @@ flex-direction: row;
 justify-content: space-between;
 align-items: center;
 
-list-style-type: bullet;
 margin: 5px;
-padding: 5px 10px;
-background-color: #005BA4;
-color: lightgrey;
+background-color: #3440FF;
+color: white;
 border-radius: 10px;
-
 &:hover {
-    color: white;
-    background: blue;
+background-color: rgb(15, 10, 222);
+}
+
 `;
 
 export const TodoContainer = styled.div`
@@ -142,6 +140,7 @@ font-size: 1em;
 border-radius: 7px;
 border: 1px solid #005BA4;
 padding: 0px 20px;
+width: 90%;
 
 &:hover {
   background-color: lightblue;
@@ -174,13 +173,14 @@ border: 1px solid black;
 border-radius: 5px;
 padding: 5px 15px;
 margin: 0;
+background-color: #D0D4DB;
+
 
 &:hover {
 border-radius: 50px;
-background-color: darkorange;
+font-weight: bold;
 transition: 300ms ease-in-out;
-
-
+background-color: orange;
 `;
 
 
@@ -192,13 +192,13 @@ align-items: center;
 
 margin: 5px;
 padding: 5px 10px;
-background-color: darkorange;
+background-color: rgb(255, 165, 0);
+opacity: 0.7;
 color: black;
 border-radius: 10px;
 
 &:hover {
-background: orange;
-font-weight: bold;
+opacity: 1;
 `;
 export const DoneTask = styled.s`
 display: flex;
@@ -230,14 +230,15 @@ position: relative;
 width: 60%;
 margin: 0;
 
-border: 2px solid #005BA4;
+border: 1px solid #005BA4;
 
 min-height: 40px;
 max-height: 360px;
 padding-bottom: 10px;
 
+border-radius: 10px;
+background-color: #F1F2F4;
 
-background-color: lightblue;
 
 overflow: ${props => props.hasItems ? 'auto' : 'hidden'};
 `;
@@ -259,36 +260,54 @@ margin: 0;
 
 export const HideShowButton = styled.button`
 position: absolute;
-top: -2px;
+top: 4px;
 right: 100px;
 
-font-size: 0.75em;
+font-size: 0.5em;
 border: 1px solid black;
 border-radius: 5px;
 padding: 5px 15px;
 margin: 0;
 
+max-width: 88.5px;
+
 &:hover {
 border-radius: 50px;
-background-color: darkorange;
+font-weight: bold;
 transition: 300ms ease-in-out;
+background-color: orange;
+
+&:hover {
+border-radius: 50px;
+font-weight: bold;
+transition: 300ms ease-in-out;
+background-color: orange;
 `;
 
 export const ClearButton = styled.button`
 position: absolute;
-top: -2px;
+top: 4px;
 right: 10px;
 
-font-size: 0.75em;
+font-size: 0.5em;
 border: 1px solid black;
 border-radius: 5px;
 padding: 5px 15px;
 margin: 0;
 
+max-width: 88.5px;
+
 &:hover {
 border-radius: 50px;
-background-color: darkorange;
+font-weight: bold;
 transition: 300ms ease-in-out;
+background-color: orange;
+
+&:hover {
+border-radius: 50px;
+font-weight: bold;
+transition: 300ms ease-in-out;
+background-color: orange;
 `;
 
 
@@ -303,13 +322,13 @@ box-sizing: border-box;
 
 margin: 5px;
 padding: 5px 10px;
-background-color: darkorange;
+background-color: red;
 color: black;
 border-radius: 10px;
+opacity: 0.7;
 
 &:hover {
-    background: orange;
-    font-weight: bold;
+opacity: 1;
 
 `;
 export const HistoryTask = styled.p`

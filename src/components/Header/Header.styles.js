@@ -10,6 +10,7 @@ flex-direction: row;
 text-align: center;
 justify-content: center;
 margin: 0;
+margin-bottom: 15px;
 color: #005BA4;
-font-size: 50px;
+font-size: 55px;
 `;

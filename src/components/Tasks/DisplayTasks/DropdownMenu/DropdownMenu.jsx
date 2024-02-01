@@ -16,7 +16,9 @@ export const DropdownMenu = ({ onEdit, onDone, onDelete }) => {
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isOpen]);
+  }, [ref, isOpen, setIsOpen]);
+
+
 
   return (
     <S.MenuContainer ref={ref}>

@@ -121,7 +121,6 @@ export const Tasks = () => {
           <S.Legend>
             Todo's List {todos.length > 0 ? `(${todos.length})` : ""}
           </S.Legend>
-
           <S.UnorderdList>
             {todos.map((todo, index) => (
               <S.LiToDoTasks key={index}>
@@ -133,8 +132,10 @@ export const Tasks = () => {
                         onChange={(e) => setEditingText(e.target.value)}
                         onKeyUp={handleEditKeyPress}
                       />
-                      <S.Button onClick={handleEditSave}>Save</S.Button>
+                      <S.Buttons>
+                        <S.Button onClick={handleEditSave}>Save</S.Button>
                       <S.Button onClick={handleEditCancel}>Cancel</S.Button>
+                      </S.Buttons>
                     </>
                   ) : (
                     <>
