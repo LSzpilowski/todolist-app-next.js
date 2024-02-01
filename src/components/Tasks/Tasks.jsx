@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import * as S from "./Tasks.styles";
-
 import { DropdownMenu } from "./DisplayTasks/DropdownMenu/DropdownMenu";
 
 export const Tasks = () => {
@@ -35,6 +34,8 @@ export const Tasks = () => {
     const newTodos = [...todos];
     newTodos.splice(index, 1);
     setTodos(newTodos);
+
+
   }
 
   function handleDone(index) {
@@ -44,6 +45,8 @@ export const Tasks = () => {
     const newTodos = [...todos];
     newTodos.splice(index, 1);
     setTodos(newTodos);
+
+
   }
 
   function handleCheckbox(index, checked) {
@@ -122,31 +125,31 @@ export const Tasks = () => {
           <S.UnorderdList>
             {todos.map((todo, index) => (
               <S.LiToDoTasks key={index}>
-                 <S.TodoContainer>
-    {editingIndex === index ? (
-      <>
-        <S.InputEdit
-          value={editingText}
-          onChange={(e) => setEditingText(e.target.value)}
-          onKeyUp={handleEditKeyPress}
-        />
-        <S.Button onClick={handleEditSave}>Save</S.Button>
-        <S.Button onClick={handleEditCancel}>Cancel</S.Button>
-      </>
-    ) : (
-      <>
-        <S.ToDoTask>
-          {index + 1 + ". "}
-          {todo.text}
-        </S.ToDoTask>
-        <DropdownMenu
-          onEdit={() => handleEditStart(index)}
-          onDone={() => handleDone(index)}
-          onDelete={() => handleDelete(index)}
-        />
-      </>
-    )}
-  </S.TodoContainer>
+                <S.TodoContainer>
+                  {editingIndex === index ? (
+                    <>
+                      <S.InputEdit
+                        value={editingText}
+                        onChange={(e) => setEditingText(e.target.value)}
+                        onKeyUp={handleEditKeyPress}
+                      />
+                      <S.Button onClick={handleEditSave}>Save</S.Button>
+                      <S.Button onClick={handleEditCancel}>Cancel</S.Button>
+                    </>
+                  ) : (
+                    <>
+                      <S.ToDoTask onDoubleClick={() => handleEditStart(index)}>
+                        {index + 1 + ". "}
+                        {todo.text}
+                      </S.ToDoTask>
+                      <DropdownMenu
+                        onEdit={() => handleEditStart(index)}
+                        onDone={() => handleDone(index)}
+                        onDelete={() => handleDelete(index)}
+                      />
+                    </>
+                  )}
+                </S.TodoContainer>
               </S.LiToDoTasks>
             ))}
           </S.UnorderdList>

@@ -7,7 +7,7 @@ export const MenuContainer = styled.div`
 
 export const DotsButton = styled.a`
   text-decoration: none;
-  margin: 0 0 0 15px;
+  margin: 0 5px 0 15px;
   padding: 0;
   font-size: 25px;
 color: white;
@@ -29,5 +29,6 @@ export const MenuItem = styled.div`
   cursor: pointer;
   &:hover {
     background-color: #f5f5f5;
+    border-radius: 10px;
   }
 `;
