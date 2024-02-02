@@ -1,37 +1,55 @@
-import React, { useState, useRef, useEffect } from 'react';
-import * as S from './DropdownMenu.styles';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import React, { useState, useRef } from "react";
+import Overlay from "react-bootstrap/Overlay";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import * as S from "./DropdownMenu.styles";
 
 export const DropdownMenu = ({ onEdit, onDone, onDelete }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (isOpen && ref.current && !ref.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [ref, isOpen, setIsOpen]);
-
-
+  const [show, setShow] = useState(false);
+  const target = useRef(null);
 
   return (
-    <S.MenuContainer ref={ref}>
-      <S.DotsButton href="#" onClick={(e) => { e.preventDefault(); setIsOpen(!isOpen); }}>
+    <S.MenuContainer ref={target}>
+      <S.DotsButton
+        href="#"
+        onClick={(e) => {
+          e.preventDefault();
+          setShow(!show);
+        }}
+      >
         <FontAwesomeIcon icon={faEllipsisVertical} />
       </S.DotsButton>
-      {isOpen && (
-        <S.Menu>
-          <S.MenuItem onClick={() => { onEdit(); setIsOpen(false); }}>Edit</S.MenuItem>
-          <S.MenuItem onClick={() => { onDone(); setIsOpen(false); }}>Done</S.MenuItem>
-          <S.MenuItem onClick={() => { onDelete(); setIsOpen(false); }}>Delete</S.MenuItem>
-        </S.Menu>
-      )}
+
+      <Overlay target={target.current} show={show} placement="right">
+        {({ placement, arrowProps, show: _show, popper, ...props }) => (
+          <S.Menu {...props}>
+            <S.MenuItem
+              onClick={() => {
+                onEdit();
+                setShow(false);
+              }}
+            >
+              Edit
+            </S.MenuItem>
+            <S.MenuItem
+              onClick={() => {
+                onDone();
+                setShow(false);
+              }}
+            >
+              Done
+            </S.MenuItem>
+            <S.MenuItem
+              onClick={() => {
+                onDelete();
+                setShow(false);
+              }}
+            >
+              Delete
+            </S.MenuItem>
+          </S.Menu>
+        )}
+      </Overlay>
     </S.MenuContainer>
   );
 };

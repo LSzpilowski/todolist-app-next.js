@@ -5,5 +5,5 @@ display: flex;
 flex-direction: column;
 justify-content: space-between;
 align-items: stretch;
-min-height: 100vh;
+min-height: 90vh;
 `;

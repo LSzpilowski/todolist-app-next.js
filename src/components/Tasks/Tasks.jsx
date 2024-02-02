@@ -13,6 +13,9 @@ export const Tasks = () => {
   const [editingIndex, setEditingIndex] = useState(null);
   const [editingText, setEditingText] = useState("");
 
+  const onToggle = () => setIsToggled(!isToggled);
+  const latestHistoryTasks = historyTasks.slice(-10);
+
   function handleChange(e) {
     setInputValue(e.target.value);
   }
@@ -34,8 +37,6 @@ export const Tasks = () => {
     const newTodos = [...todos];
     newTodos.splice(index, 1);
     setTodos(newTodos);
-
-
   }
 
   function handleDone(index) {
@@ -45,8 +46,6 @@ export const Tasks = () => {
     const newTodos = [...todos];
     newTodos.splice(index, 1);
     setTodos(newTodos);
-
-
   }
 
   function handleCheckbox(index, checked) {
@@ -105,10 +104,6 @@ export const Tasks = () => {
     }
   }
 
-  const onToggle = () => setIsToggled(!isToggled);
-
-  const latestHistoryTasks = historyTasks.slice(-10);
-
   return (
     <S.Wrapper>
       <S.AddTask onSubmit={handleSubmit}>
@@ -134,7 +129,7 @@ export const Tasks = () => {
                       />
                       <S.Buttons>
                         <S.Button onClick={handleEditSave}>Save</S.Button>
-                      <S.Button onClick={handleEditCancel}>Cancel</S.Button>
+                        <S.Button onClick={handleEditCancel}>Cancel</S.Button>
                       </S.Buttons>
                     </>
                   ) : (
@@ -143,6 +138,7 @@ export const Tasks = () => {
                         {index + 1 + ". "}
                         {todo.text}
                       </S.ToDoTask>
+
                       <DropdownMenu
                         onEdit={() => handleEditStart(index)}
                         onDone={() => handleDone(index)}
@@ -196,9 +192,9 @@ export const Tasks = () => {
               <S.LiHistory key={index}>
                 <S.HistoryTask>
                   {task.text}
-                  <S.Button onClick={(e) => handleReUseButton(index)}>
+                  <S.ReUseButton onClick={(e) => handleReUseButton(index)}>
                     Re-Use
-                  </S.Button>
+                  </S.ReUseButton>
                 </S.HistoryTask>
               </S.LiHistory>
             ))}
