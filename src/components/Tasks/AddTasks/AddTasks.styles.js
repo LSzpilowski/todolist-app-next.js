@@ -1,36 +1,44 @@
 import styled from 'styled-components';
 
-export const Form = styled.form.attrs({
-  autoComplete: 'off',
+export const AddTask = styled.form.attrs({
+  autoComplete: "off",
 })`
-display: flex;
-flex-direction: row;
-justify-content: center;
-padding: 15px;
-margin-top: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 `;
 
 export const InputText = styled.input.attrs({
-  type: 'text',
-  id:'inputText',
-  placeholder:'What to do today?',
-  minLength: '3',
+  type: "text",
+  id: "inputText",
+  placeholder: "What to do today?",
+  minLength: "3",
+  maxLength: "70",
   required: true,
 })`
 font-size: 2em;
 border-radius: 7px;
-border: 1px solid #7D7D7D;
-color: red;
+border: 1px solid #005BA4;
 padding: 0px 20px;
+}
 `;
 
 export const InputSubmit = styled.input.attrs({
-  type: 'submit',
-  value: 'Add Todo',
-  id:'inputSubmit',
+  type: "submit",
+  value: "Add Todo",
+  id: "inputSubmit",
 })`
-font-size: 2em;
-border-radius: 7px;
-border: 1px solid #7D7D7D;
-padding: 0px 20px;
+  font-size: 2em;
+  border-radius: 7px;
+  border: 1px solid #005ba4;
+  padding: 0px 20px;
+  max-width: 176px;
+  background-color: blue;
+  color: white;
+  transition: 200ms ease-in-out;
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1;
+  }
 `;
