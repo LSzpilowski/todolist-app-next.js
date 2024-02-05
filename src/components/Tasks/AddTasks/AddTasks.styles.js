@@ -6,6 +6,7 @@ export const AddTask = styled.form.attrs({
   display: flex;
   flex-direction: row;
   justify-content: center;
+  margin: 15px 0 30px 0;
 `;
 
 export const InputText = styled.input.attrs({

@@ -1,6 +1,6 @@
-import React from "react";
-import * as S from "./TasksHistory.styles";
-import * as U from "../utils.styles";
+import React from 'react';
+import * as S from './TasksHistory.styles';
+import * as U from '../utils.styles';
 
 export const TasksHistory = ({
   historyTasks,
@@ -11,9 +11,7 @@ export const TasksHistory = ({
   handleReUseButton,
 }) => {
   return (
-    <S.TaskHistoryFieldset
-      $hasitems={historyTasks.length > 0 ? "true" : "false"}
-    >
+    <S.TaskHistoryFieldset $hasitems={latestHistoryTasks.length > 0}>
       <U.Legend>
         <U.LegendText>Your Task History</U.LegendText>
         {latestHistoryTasks.length > 0 && (
@@ -25,7 +23,7 @@ export const TasksHistory = ({
           </>
         )}
       </U.Legend>
-      {!isToggled && (
+      {!isToggled && latestHistoryTasks.length > 0 && (
         <S.UlHistory>
           {latestHistoryTasks.map((task, index) => (
             <S.LiHistoryTask key={index}>
@@ -42,3 +40,4 @@ export const TasksHistory = ({
     </S.TaskHistoryFieldset>
   );
 };
+

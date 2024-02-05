@@ -4,10 +4,7 @@ import { Fieldset, LiTasks, UnorderdList, Button } from "../utils.styles";
 
 export const TaskHistoryFieldset = styled(Fieldset)`
   position: relative;
-  min-height: 40px;
-  max-height: 360px;
-  padding-bottom: 10px;
-  overflow: ${(props) => (props.hasItems ? "auto" : "hidden")};
+  display: ${(props) => (props.$hasitems ? "block" : "none")};
 `;
 
 export const UlHistory = styled(UnorderdList)`
