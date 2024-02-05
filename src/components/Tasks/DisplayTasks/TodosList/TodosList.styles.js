@@ -1,23 +1,20 @@
-import styled from 'styled-components';
-import { LiTasks } from '../utils.styles';
+import styled from "styled-components";
+import { LiTasks, UnorderdList } from "../utils.styles";
 
-export const Buttons = styled.div`
-display: flex;
-flex-direction: row;
-justify-content: space-evenly;
-align-items: center;
-margin: 0;
-padding: 0;
-width: 30%;
-}
+export const TodosList = styled(UnorderdList)`
+  margin: 0;
+  min-height: 250px;
+  max-height: 380px;
+  padding: 5px;
 `;
 
 export const LiTodosTasks = styled(LiTasks)`
-background-color: #3440ff;
+  background-color: #3440ff;
   color: white;
+
   &:hover {
     background-color: rgb(15, 10, 222);
-}
+  }
 `;
 
 export const TodoContainer = styled.div`
@@ -26,13 +23,6 @@ export const TodoContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-`;
-
-export const ToDoTask = styled.p`
-  width: 100%;
-  margin: 0;
-  overflow: hidden;
-  user-select: none;
 `;
 
 export const InputEdit = styled.input`
@@ -46,4 +36,22 @@ export const InputEdit = styled.input`
     background-color: lightblue;
     transition: 200ms ease-in-out;
   }
+`;
+
+export const Buttons = styled.div`
+display: flex;
+flex-direction: row;
+justify-content: space-evenly;
+align-items: center;
+margin: 0;
+padding: 0;
+width: 30%;
+}
+`;
+
+export const ToDoTask = styled.p`
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+  user-select: none;
 `;

@@ -1,5 +1,5 @@
-import React from 'react';
-import * as S from './AddTasks.styles';
+import React from "react";
+import * as S from "./AddTasks.styles";
 
 export const AddTasks = ({ inputValue, handleChange, handleSubmit }) => {
   return (

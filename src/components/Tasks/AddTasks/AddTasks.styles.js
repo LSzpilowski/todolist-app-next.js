@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const AddTask = styled.form.attrs({
   autoComplete: "off",

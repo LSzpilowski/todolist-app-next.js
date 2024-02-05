@@ -1,12 +1,17 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import * as S from "./Tasks.styles";
-import { DropdownMenu } from "./DisplayTasks/DropdownMenu/DropdownMenu";
+
+import { AddTasks } from "./AddTasks/AddTasks";
+import { TodosList } from "./DisplayTasks/TodosList/TodosList";
+import { DonesList } from "./DisplayTasks/DonesList/DonesList";
+import { TasksHistory } from "./DisplayTasks/TasksHistory/TasksHistory";
 
 export const Tasks = () => {
   const [dones, setDones] = useState([]);
   const [todos, setTodos] = useState([]);
+
   const [historyTasks, setHistoryTasks] = useState([]);
+
   const [inputValue, setInputValue] = useState("");
   const [isToggled, setIsToggled] = useState(true);
 
@@ -106,101 +111,35 @@ export const Tasks = () => {
 
   return (
     <S.Wrapper>
-      <S.AddTask onSubmit={handleSubmit}>
-        <S.InputText value={inputValue} onChange={handleChange} />
-        <S.InputSubmit type="submit" />
-      </S.AddTask>
-
+      <AddTasks
+        inputValue={inputValue}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+      />
       <S.DisplayTasks>
-        <S.Fieldset>
-          <S.Legend>
-            Todo's List {todos.length > 0 ? `(${todos.length})` : ""}
-          </S.Legend>
-          <S.UnorderdList>
-            {todos.map((todo, index) => (
-              <S.LiToDoTasks key={index}>
-                <S.TodoContainer>
-                  {editingIndex === index ? (
-                    <>
-                      <S.InputEdit
-                        value={editingText}
-                        onChange={(e) => setEditingText(e.target.value)}
-                        onKeyUp={handleEditKeyPress}
-                      />
-                      <S.Buttons>
-                        <S.Button onClick={handleEditSave}>Save</S.Button>
-                        <S.Button onClick={handleEditCancel}>Cancel</S.Button>
-                      </S.Buttons>
-                    </>
-                  ) : (
-                    <>
-                      <S.ToDoTask onDoubleClick={() => handleEditStart(index)}>
-                        {index + 1 + ". "}
-                        {todo.text}
-                      </S.ToDoTask>
-
-                      <DropdownMenu
-                        onEdit={() => handleEditStart(index)}
-                        onDone={() => handleDone(index)}
-                        onDelete={() => handleDelete(index)}
-                      />
-                    </>
-                  )}
-                </S.TodoContainer>
-              </S.LiToDoTasks>
-            ))}
-          </S.UnorderdList>
-        </S.Fieldset>
-
-        <S.Fieldset>
-          <S.Legend>
-            <S.LegendText>
-              What's Done {dones.length > 0 ? `(${dones.length})` : ""}
-            </S.LegendText>
-          </S.Legend>
-          <S.UnorderdList>
-            {dones.map((done, index) => (
-              <S.LiDoneTasks key={index}>
-                <S.DoneTask>
-                  {done.text}
-                  <S.DoneCheckbox
-                    checked={done.isChecked}
-                    onChange={(e) => handleCheckbox(index, e.target.checked)}
-                  />
-                </S.DoneTask>
-              </S.LiDoneTasks>
-            ))}
-          </S.UnorderdList>
-        </S.Fieldset>
+        <TodosList
+          todos={todos}
+          editingIndex={editingIndex}
+          editingText={editingText}
+          setEditingText={setEditingText}
+          setEditingIndex={setEditingIndex}
+          handleEditKeyPress={handleEditKeyPress}
+          handleEditSave={handleEditSave}
+          handleEditCancel={handleEditCancel}
+          handleEditStart={handleEditStart}
+          handleDone={handleDone}
+          handleDelete={handleDelete}
+        />
+        <DonesList dones={dones} handleCheckbox={handleCheckbox} />
       </S.DisplayTasks>
-
-      <S.TaskHistory hasItems={historyTasks.length > 0}>
-        <S.Legend>
-          <S.LegendText>Your Task History</S.LegendText>
-          {latestHistoryTasks.length > 0 && (
-            <>
-              <S.HideShowButton id="toggle" onClick={onToggle}>
-                {!isToggled ? "Hide" : "Show"}
-              </S.HideShowButton>
-              <S.ClearButton onClick={handleClearHistory}>Clear</S.ClearButton>
-            </>
-          )}
-        </S.Legend>
-        {!isToggled && (
-          <S.UlHistory>
-            {latestHistoryTasks.map((task, index) => (
-              <S.LiHistory key={index}>
-                <S.HistoryTask>
-                  {task.text}
-                  <S.ReUseButton onClick={(e) => handleReUseButton(index)}>
-                    Re-Use
-                  </S.ReUseButton>
-                </S.HistoryTask>
-              </S.LiHistory>
-            ))}
-          </S.UlHistory>
-        )}
-      </S.TaskHistory>
+      <TasksHistory
+        historyTasks={historyTasks}
+        latestHistoryTasks={latestHistoryTasks}
+        onToggle={onToggle}
+        isToggled={isToggled}
+        handleClearHistory={handleClearHistory}
+        handleReUseButton={handleReUseButton}
+      />
     </S.Wrapper>
   );
 };

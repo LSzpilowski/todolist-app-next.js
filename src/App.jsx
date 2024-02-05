@@ -10,7 +10,6 @@ export const App = () => {
     <Header />
     <Tasks />
     <Footer />
-  
   </S.Wrapper>
   );
 }
