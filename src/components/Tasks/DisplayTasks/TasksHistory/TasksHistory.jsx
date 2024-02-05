@@ -3,7 +3,6 @@ import * as S from './TasksHistory.styles';
 import * as U from '../utils.styles';
 
 export const TasksHistory = ({
-  historyTasks,
   latestHistoryTasks,
   onToggle,
   isToggled,

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import * as S from "./Tasks.styles";
+import * as S from "./DisplayTasks.styles";
 
-import { AddTasks } from "./AddTasks/AddTasks";
-import { TodosList } from "./DisplayTasks/TodosList/TodosList";
-import { DonesList } from "./DisplayTasks/DonesList/DonesList";
-import { TasksHistory } from "./DisplayTasks/TasksHistory/TasksHistory";
+import { AddTasks } from "../AddTasks/AddTasks";
+import { TodosList } from "./TodosList/TodosList";
+import { DonesList } from "./DonesList/DonesList";
+import { TasksHistory } from "./TasksHistory/TasksHistory";
 
-export const Tasks = () => {
+export const DisplayTasks = () => {
   const [dones, setDones] = useState([]);
   const [todos, setTodos] = useState([]);
 
@@ -133,7 +133,6 @@ export const Tasks = () => {
         <DonesList dones={dones} handleCheckbox={handleCheckbox} />
       </S.DisplayTasks>
       <TasksHistory
-        historyTasks={historyTasks}
         latestHistoryTasks={latestHistoryTasks}
         onToggle={onToggle}
         isToggled={isToggled}
