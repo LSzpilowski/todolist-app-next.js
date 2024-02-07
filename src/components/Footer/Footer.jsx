@@ -7,7 +7,7 @@ export const Footer = () => {
       <S.Text>
         Coded by
         <S.Link target="_blank" id="link" href="https://github.com/LSzpilowski">
-          LucAround
+          LSzpilowski
         </S.Link>
       </S.Text>
     </S.Footer>
