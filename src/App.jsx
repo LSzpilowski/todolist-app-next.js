@@ -2,6 +2,7 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer'
 import { DisplayTasks } from './components/Tasks/DisplayTasks/DisplayTasks';
 import * as S from './App.styles'
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 
 
@@ -11,6 +12,7 @@ export const App = () => {
     <Header />
     <DisplayTasks />
     <Footer />
+    <SpeedInsights/>
   </S.Wrapper>
   );
 }
