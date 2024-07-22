@@ -2,8 +2,10 @@
 
 import React, { useState } from "react";
 import { AddTasks } from "./displayTasks/addTasks";
-import { TodosList } from "./displayTasks/todosList";
+import { TodosList } from "./displayTasks/todoList";
 import { DonesList } from "./displayTasks/doneList";
+
+import { Card } from "@/components/ui/card";
 import { TasksHistory } from "./displayTasks/tasksHistory";
 
 interface Todo {
@@ -21,11 +23,9 @@ export const DisplayTasks: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [historyTasks, setHistoryTasks] = useState<Todo[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
-  const [isToggled, setIsToggled] = useState<boolean>(true);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editingText, setEditingText] = useState<string>("");
 
-  const onToggle = () => setIsToggled(!isToggled);
   const latestHistoryTasks = historyTasks.slice(-10);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -116,13 +116,19 @@ export const DisplayTasks: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col items-center align-middle justify-between min-h-[75vh] m-0 p-0">
+    <Card className="border-hidden">
+      <Card className="border-hidden">
       <AddTasks
         inputValue={inputValue}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
+        latestHistoryTasks={latestHistoryTasks}
+        handleClearHistory={handleClearHistory}
+        handleReUseButton={handleReUseButton}
+
       />
-      <div className="w-[90%] my-[25px] p-[15px] flex flex-row justify-between">
+       </Card>
+      <Card className="w-full flex flex-col md:flex-row justify-between gap-5 md:gap-10 p-5 md:p-10 border-hidden">
         <TodosList
           todos={todos}
           editingIndex={editingIndex}
@@ -137,14 +143,14 @@ export const DisplayTasks: React.FC = () => {
           handleDelete={handleDelete}
         />
         <DonesList dones={dones} handleCheckbox={handleCheckbox} />
-      </div>
-      <TasksHistory
+      </Card>
+      <Card className="w-full flex flex-rw justify-center border-hidden my-5">
+      <TasksHistory 
         latestHistoryTasks={latestHistoryTasks}
-        onToggle={onToggle}
-        isToggled={isToggled}
         handleClearHistory={handleClearHistory}
         handleReUseButton={handleReUseButton}
-      />
-    </div>
+        />
+        </Card>
+    </Card>
   );
 };

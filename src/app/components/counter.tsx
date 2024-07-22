@@ -28,8 +28,8 @@ export const Counter: React.FC = () => {
     .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 
   return (
-    <div className="text-[1.125rem] font-bold w-1/3">
-      <p className="pl-[5%] w-[20%] cursor-pointer"
+    <div className="text-base md:text-xl font-bold w-1/3">
+      <p className="pl-2 pt-2 w-1/5 cursor-pointer"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >

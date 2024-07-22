@@ -1,5 +1,15 @@
 import React from "react";
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { ScrollArea } from "@/components/ui/scroll-area";
+
 interface IDone {
   text: string;
   isChecked: boolean;
@@ -12,16 +22,18 @@ interface IDoneList {
 
 export const DonesList: React.FC<IDoneList> = ({ dones, handleCheckbox }) => {
   return (
-    <fieldset className="w-[60%] overflow-auto mx-[15px] border-solid-[#005ba4] rounded-[10px] bg-[#f1f2f4] ">
-      <legend className="bg-transparent text-[2em] font-bold transform transition-all duration-300 ease-in-out">
-        <p className="m-0">
+    <Card className="w-full md:w-1/2 flex flex-col md:min-h-80">
+      <CardHeader>
+        <CardTitle >
           Whats Done {dones.length > 0 ? `(${dones.length})` : ""}
-        </p>
-      </legend>
-      <ul className="m-0 min-h-[250px] max-h-[380px] p-[5px]">
+        </CardTitle>
+      </CardHeader>
+      {dones.length > 0 ? 
+     <CardContent className={`max-h-44 md:max-h-72 ${dones.length > 3 ? "overflow-y-scroll" : ""} ${dones.length > 5 ? "md:overflow-y-scroll" : ""}`}>
+      <ul className="flex flex-col gap-3">
         {dones.map((done, index) => (
-          <li
-            className="bg-[rgb(255, 165, 0)] opacity-70 text-black hover:opacity-100"
+          <Card
+            className="py-2 px-3 text-lg"
             key={index}
           >
             <s className="flex flex-row justify-between items-center m-0 w-[100%] overflow-hidden">
@@ -33,9 +45,12 @@ export const DonesList: React.FC<IDoneList> = ({ dones, handleCheckbox }) => {
                 onChange={(e) => handleCheckbox(index, e.target.checked)}
               />
             </s>
-          </li>
+          </Card>
         ))}
       </ul>
-    </fieldset>
+      </CardContent>  
+    : null}
+     
+    </Card>
   );
 };

@@ -1,5 +1,14 @@
-import React from 'react';
-
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 interface ITask {
   text: string;
@@ -7,61 +16,62 @@ interface ITask {
 
 interface ITasksHistory {
   latestHistoryTasks: ITask[];
-  onToggle: () => void;
-  isToggled: boolean;
   handleClearHistory: () => void;
   handleReUseButton: (index: number) => void;
 }
 
 export const TasksHistory: React.FC<ITasksHistory> = ({
   latestHistoryTasks,
-  onToggle,
-  isToggled,
   handleClearHistory,
   handleReUseButton,
 }) => {
+
+
   return (
-    <fieldset className={`relative ${latestHistoryTasks.length > 0 ? 'has-items' : ''}`}>
-      <legend className="bg-transparent text-2xl font-bold transform transition-all duration-300 ease-in-out">
-        <p className="m-0">Your Task History</p>
-        {latestHistoryTasks.length > 0 && (
-          <>
-            <button
-              id="toggle"
-              onClick={onToggle}
-              className="absolute top-1 right-[100px] max-w-[88.5px] text-xs"
-            >
-              {!isToggled ? "Hide" : "Show"}
-            </button>
-            <button
-              onClick={handleClearHistory}
-              className="absolute top-1 right-2 max-w-[88.5px] text-xs"
-            >
-              Clear
-            </button>
-          </>
-        )}
-      </legend>
-      {!isToggled && latestHistoryTasks.length > 0 && (
-        <ul className="flex flex-col">
-          {latestHistoryTasks.map((task, index) => (
-            <li
-              key={index}
-              className="bg-red-500 text-black opacity-70 hover:opacity-100"
-            >
-              <div className="flex justify-between items-center w-full overflow-hidden">
-                {task.text}
-                <button
-                  onClick={(e) => handleReUseButton(index)}
-                  className="text-sm"
+    <>
+    {latestHistoryTasks.length > 0 ? 
+      <Sheet>
+      <SheetTrigger className="m-0">
+        <Button>History List</Button>
+      </SheetTrigger>
+      <SheetContent className="max-h-screen w-full">
+        <Card className="flex flex-col">
+          <CardHeader>
+            <CardTitle className="flex flex-col items-center justify-between gap-4">
+              <p className="m-0 text-2xl font-bold">Your Task History</p>
+              {latestHistoryTasks.length > 0 && (
+                <Button
+                  onClick={handleClearHistory}
+                  className="size-6 px-8  "
                 >
-                  Re-Use
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-    </fieldset>
+                  Clear all
+                </Button>
+              )}
+            </CardTitle>
+          </CardHeader>
+          {latestHistoryTasks.length > 0 ? 
+             <CardContent>
+            {latestHistoryTasks.length > 0 && (
+              <ul className="flex flex-col gap-3">
+                {latestHistoryTasks.map((task, index) => (
+                  <Card key={index} className="py-2 px-3 text-lg flex justify-between items-center w-full hover:bg-secondary">
+                      {task.text}
+                      <Button
+                        onClick={(e) => handleReUseButton(index)}
+                        className="size-6 px-8"
+                      >
+                        Re-Use
+                      </Button>
+                  </Card>
+                ))}
+              </ul>
+            )}
+          </CardContent>
+          : null}
+        </Card>
+      </SheetContent>
+    </Sheet>
+      : <></>}
+      </>
   );
 };
