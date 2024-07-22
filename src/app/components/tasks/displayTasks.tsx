@@ -144,7 +144,7 @@ export const DisplayTasks: React.FC = () => {
         />
         <DonesList dones={dones} handleCheckbox={handleCheckbox} />
       </Card>
-      <Card className="w-full flex flex-rw justify-center border-hidden my-5">
+      <Card className="w-full flex flex-rw justify-center border-hidden my-5 md:hidden">
       <TasksHistory 
         latestHistoryTasks={latestHistoryTasks}
         handleClearHistory={handleClearHistory}
