@@ -34,7 +34,7 @@ export const DonesList: React.FC<IDoneList> = ({ dones, handleCheckbox }) => {
   const hiddenCount = dones.length - visibleDones.length;
 
   return (
-    <Card className="w-full md:w-1/2 flex flex-col min-h-65 max-h-65 md:min-h-125 md:max-h-125 shadow-md border-2 transition-all hover:shadow-lg">
+    <Card className="w-full md:w-1/2 flex flex-col min-h-65 max-h-65 md:min-h-110 md:max-h-110 shadow-md border-2 transition-all hover:shadow-lg">
       <CardHeader className="pb-3">
         <CardTitle className="text-2xl md:text-2xl font-semibold flex items-center gap-2">
           <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400" />
