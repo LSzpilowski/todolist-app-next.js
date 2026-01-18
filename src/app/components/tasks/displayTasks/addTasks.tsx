@@ -26,31 +26,38 @@ export const AddTasks = ({
   handleReUseButton,
 }: IAddTasks) => {
   return (
-    <Card className="flex flex-row justify-center gap-2 border-hidden">
+    <Card className="flex flex-row justify-center items-center gap-3 md:gap-4 py-4 px-4 md:px-6 border-2 shadow-lg">
       <div className="hidden md:block">
-      <TasksHistory
-        latestHistoryTasks={latestHistoryTasks}
-        handleClearHistory={handleClearHistory}
-        handleReUseButton={handleReUseButton}
-      />
+        <TasksHistory
+          latestHistoryTasks={latestHistoryTasks}
+          handleClearHistory={handleClearHistory}
+          handleReUseButton={handleReUseButton}
+        />
       </div>
       <form
         autoComplete="off"
         onSubmit={handleSubmit}
-        className="flex flex-row gap-1 md:gap-2"
+        className="flex flex-row gap-2 md:gap-3 w-full md:w-auto"
       >
         <Input
+          id="task-input"
+          name="task"
           type="text"
-          placeholder="What to do today?"
+          placeholder="What's on your mind today?"
           minLength={3}
           maxLength={70}
           required={true}
           value={inputValue}
           onChange={handleChange}
-          className="bg-primary rounded-md text-secondary text-lg md:w-96"
+          className="text-base md:text-lg md:w-96 h-11 px-4"
+          aria-label="Enter new task"
         />
-        <Button type="submit" className="bg-primary">
-          Add ToDo
+        <Button 
+          type="submit" 
+          className="h-11 px-6 font-medium bg-black/50 dark:bg-white text-white dark:text-black hover:bg-black/70 dark:hover:bg-white/90"
+          aria-label="Add new task"
+        >
+          Add Task
         </Button>
       </form>
     </Card>
