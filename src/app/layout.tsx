@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "./theme-provider";
+import { Toaster } from "sonner";
 import "@/styles/globals.css"
 import { fontSans } from "@/lib/fonts";
 
@@ -25,6 +26,7 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system">
           {children}
+          <Toaster position="bottom-right" richColors closeButton />
         </ThemeProvider>
       </body>
     </html>

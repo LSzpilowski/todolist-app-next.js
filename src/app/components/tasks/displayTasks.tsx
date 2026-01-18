@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { AddTasks } from "./displayTasks/addTasks";
 import { TodosList } from "./displayTasks/todoList";
 import { DonesList } from "./displayTasks/doneList";
+import { toast } from "sonner";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 import { Card } from "@/components/ui/card";
 import { TasksHistory } from "./displayTasks/tasksHistory";
@@ -19,9 +21,9 @@ interface Done {
 }
 
 export const DisplayTasks: React.FC = () => {
-  const [dones, setDones] = useState<Done[]>([]);
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [historyTasks, setHistoryTasks] = useState<Todo[]>([]);
+  const [dones, setDones] = useLocalStorage<Done[]>("todolist-dones", []);
+  const [todos, setTodos] = useLocalStorage<Todo[]>("todolist-todos", []);
+  const [historyTasks, setHistoryTasks] = useLocalStorage<Todo[]>("todolist-history", []);
   const [inputValue, setInputValue] = useState<string>("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editingText, setEditingText] = useState<string>("");
@@ -38,16 +40,25 @@ export const DisplayTasks: React.FC = () => {
     if (trimmedInput.length >= 3) {
       setTodos([...todos, { text: trimmedInput, isChecked: false }]);
       setInputValue("");
+      toast.success("Task added successfully!");
+      if (todos.length >= 7) {
+        toast.info("You're doing great planning ahead! Consider completing a few tasks first to stay focused.", {
+          duration: 5000,
+        });
+      }
     } else {
+      toast.error("Task must be at least 3 characters long");
       return null;
     }
   }
 
   function handleDelete(index: number) {
+    const taskText = todos[index].text;
     setHistoryTasks([...historyTasks, todos[index]]);
     const newTodos = [...todos];
     newTodos.splice(index, 1);
     setTodos(newTodos);
+    toast.info("Task moved to history");
   }
 
   function handleDone(index: number) {
@@ -56,6 +67,7 @@ export const DisplayTasks: React.FC = () => {
     const newTodos = [...todos];
     newTodos.splice(index, 1);
     setTodos(newTodos);
+    toast.success("Task completed!");
   }
 
   function handleCheckbox(index: number, checked: boolean) {
@@ -65,6 +77,7 @@ export const DisplayTasks: React.FC = () => {
       const newDones = [...dones];
       newDones.splice(index, 1);
       setDones(newDones);
+      toast.info("Task restored to active list");
     } else {
       const newDones = [...dones];
       newDones[index].isChecked = true;
@@ -80,11 +93,13 @@ export const DisplayTasks: React.FC = () => {
       const newHistoryTasks = [...historyTasks];
       newHistoryTasks.splice(originalIndex, 1);
       setHistoryTasks(newHistoryTasks);
+      toast.success("Task restored from history");
     }
   }
 
   function handleClearHistory() {
     setHistoryTasks([]);
+    toast.success("History cleared");
   }
 
   function handleEditStart(index: number) {
@@ -104,6 +119,7 @@ export const DisplayTasks: React.FC = () => {
 
       setTodos(newTodos);
       handleEditCancel();
+      toast.success("Task updated successfully");
     }
   }
 
@@ -116,19 +132,19 @@ export const DisplayTasks: React.FC = () => {
   }
 
   return (
-    <Card className="border-hidden">
-      <Card className="border-hidden">
-      <AddTasks
-        inputValue={inputValue}
-        handleChange={handleChange}
-        handleSubmit={handleSubmit}
-        latestHistoryTasks={latestHistoryTasks}
-        handleClearHistory={handleClearHistory}
-        handleReUseButton={handleReUseButton}
-
-      />
-       </Card>
-      <Card className="w-full flex flex-col md:flex-row justify-between gap-5 md:gap-10 p-5 md:p-10 border-hidden">
+    <div className="flex flex-col gap-6 md:gap-8 w-full mt-18 md:mt-24">
+      <div className="w-full flex justify-center">
+        <AddTasks
+          inputValue={inputValue}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+          latestHistoryTasks={latestHistoryTasks}
+          handleClearHistory={handleClearHistory}
+          handleReUseButton={handleReUseButton}
+        />
+      </div>
+      
+      <div className="w-full flex flex-col md:flex-row justify-between gap-4 md:gap-6">
         <TodosList
           todos={todos}
           editingIndex={editingIndex}
@@ -143,14 +159,15 @@ export const DisplayTasks: React.FC = () => {
           handleDelete={handleDelete}
         />
         <DonesList dones={dones} handleCheckbox={handleCheckbox} />
-      </Card>
-      <Card className="w-full flex flex-rw justify-center border-hidden my-5 md:hidden">
-      <TasksHistory 
-        latestHistoryTasks={latestHistoryTasks}
-        handleClearHistory={handleClearHistory}
-        handleReUseButton={handleReUseButton}
+      </div>
+      
+      <div className="w-full flex justify-center md:hidden">
+        <TasksHistory 
+          latestHistoryTasks={latestHistoryTasks}
+          handleClearHistory={handleClearHistory}
+          handleReUseButton={handleReUseButton}
         />
-        </Card>
-    </Card>
+      </div>
+    </div>
   );
 };
