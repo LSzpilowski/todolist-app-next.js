@@ -35,7 +35,7 @@ export function AuthComponent() {
     return (
       <Card className="w-full max-w-md mx-auto">
         <CardHeader>
-          <CardTitle>Zalogowano</CardTitle>
+          <CardTitle>Logged In</CardTitle>
           <CardDescription>
             {user.email}
           </CardDescription>
@@ -59,7 +59,7 @@ export function AuthComponent() {
             </div>
           </div>
           <Button onClick={signOut} variant="outline" className="w-full">
-            Wyloguj się
+            Log out
           </Button>
         </CardContent>
       </Card>
@@ -69,9 +69,9 @@ export function AuthComponent() {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle>Zaloguj się</CardTitle>
+        <CardTitle>Sign in</CardTitle>
         <CardDescription>
-          Wybierz sposób logowania
+          Choose your sign in method
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
@@ -81,7 +81,7 @@ export function AuthComponent() {
           className="w-full gap-2"
         >
           <FaGoogle className="w-5 h-5" />
-          Kontynuuj z Google
+          Continue with Google
         </Button>
         <Button 
           onClick={handleGithubSignIn}
@@ -89,7 +89,7 @@ export function AuthComponent() {
           className="w-full gap-2"
         >
           <FaGithub className="w-5 h-5" />
-          Kontynuuj z GitHub
+          Continue with GitHub
         </Button>
       </CardContent>
     </Card>
