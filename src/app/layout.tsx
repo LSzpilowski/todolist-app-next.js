@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "./theme-provider";
 import { AuthProvider } from "./components/auth/AuthProvider";
+import { TasksProvider } from "./components/tasks/TasksProvider";
+import { SignInReminder } from "./components/tasks/MigrationDialog";
 import { Toaster } from "sonner";
 import "@/styles/globals.css"
 import { fontSans } from "@/lib/fonts";
@@ -27,8 +29,11 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system">
           <AuthProvider>
-            {children}
-            <Toaster position="bottom-right" richColors closeButton />
+            <TasksProvider>
+              <SignInReminder />
+              {children}
+              <Toaster position="bottom-right" richColors closeButton />
+            </TasksProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

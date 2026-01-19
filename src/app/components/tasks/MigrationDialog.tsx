@@ -1,0 +1,73 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useAuthStore } from '@/store/authStore';
+import { useTasksStore } from '@/store/tasksStore';
+import { Button } from '@/components/ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+
+const REMINDER_DISMISSED_KEY = 'doitly_reminder_dismissed';
+const TASK_THRESHOLD = 3; // Show reminder after 3+ tasks
+
+export function SignInReminder() {
+  const [open, setOpen] = useState(false);
+  const { user } = useAuthStore();
+  const { tasks, doneTasks } = useTasksStore();
+
+  useEffect(() => {
+    // Don't show if already logged in
+    if (user) return;
+
+    // Check if user already dismissed the reminder
+    const dismissed = localStorage.getItem(REMINDER_DISMISSED_KEY);
+    if (dismissed) return;
+
+    // Count total tasks (active + done)
+    const totalTasks = tasks.length + doneTasks.length;
+
+    // Show reminder if user has 3 or more tasks
+    if (totalTasks >= TASK_THRESHOLD) {
+      setTimeout(() => setOpen(true), 500);
+    }
+  }, [user, tasks.length, doneTasks.length]);
+
+  const handleDismiss = () => {
+    localStorage.setItem(REMINDER_DISMISSED_KEY, 'true');
+    setOpen(false);
+  };
+
+  return (
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Keep your tasks safe! 🔒</AlertDialogTitle>
+          <AlertDialogDescription className="space-y-2">
+            <p>
+              You&apos;ve created {tasks.length + doneTasks.length} tasks! 
+              It would be a pity to lose your progress.
+            </p>
+            <p className="font-medium">
+              Sign in to sync your tasks across all devices and never lose them.
+            </p>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter className="flex-col sm:flex-row gap-2">
+          <Button onClick={handleDismiss} variant="outline" className="m-0 sm:flex-1">
+            Maybe later
+          </Button>
+          <AlertDialogAction onClick={handleDismiss} className="m-0 sm:flex-1">
+            Got it
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
