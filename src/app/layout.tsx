@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "./theme-provider";
+import { AuthProvider } from "./components/auth/AuthProvider";
 import { Toaster } from "sonner";
 import "@/styles/globals.css"
 import { fontSans } from "@/lib/fonts";
@@ -25,8 +26,10 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <ThemeProvider attribute="class" defaultTheme="system">
-          {children}
-          <Toaster position="bottom-right" richColors closeButton />
+          <AuthProvider>
+            {children}
+            <Toaster position="bottom-right" richColors closeButton />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
