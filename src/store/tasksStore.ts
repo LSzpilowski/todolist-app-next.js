@@ -87,17 +87,14 @@ export const useTasksStore = create<TasksState>((set, get) => ({
         console.error('Error adding task to Supabase:', error);
         return;
       }
+      
+      // Reload from Supabase to get the latest state
+      await get().loadTasks(userId);
     } else {
-      // Save to localStorage
+      // Save to localStorage - only add once!
       const tasks = [...get().tasks, newTask];
       set({ tasks });
       saveLocalTasks(tasks);
-    }
-
-    if (userId) {
-      await get().loadTasks(userId);
-    } else {
-      set({ tasks: [...get().tasks, newTask] });
     }
   },
 

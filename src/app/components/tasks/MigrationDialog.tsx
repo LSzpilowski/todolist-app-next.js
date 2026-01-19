@@ -50,13 +50,13 @@ export function SignInReminder() {
         <AlertDialogHeader>
           <AlertDialogTitle>Keep your tasks safe! 🔒</AlertDialogTitle>
           <AlertDialogDescription className="space-y-2">
-            <p>
+            <span className="block">
               You&apos;ve created {tasks.length + doneTasks.length} tasks! 
               It would be a pity to lose your progress.
-            </p>
-            <p className="font-medium">
+            </span>
+            <span className="block font-medium">
               Sign in to sync your tasks across all devices and never lose them.
-            </p>
+            </span>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="flex-col sm:flex-row gap-2">
