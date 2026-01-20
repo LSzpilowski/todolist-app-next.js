@@ -113,7 +113,7 @@ export const AccountSheet: React.FC = () => {
           Account
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="max-h-screen w-full sm:max-w-lg overflow-y-auto bg-black">
+      <SheetContent side="right" className="max-h-screen w-full sm:max-w-lg overflow-y-auto bg-gradient-to-br from-black to-gray-900">
         <SheetHeader>
           <SheetTitle>Account & Statistics</SheetTitle>
           <SheetDescription>

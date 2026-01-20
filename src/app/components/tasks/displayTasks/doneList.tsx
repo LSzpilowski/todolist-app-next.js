@@ -36,10 +36,31 @@ interface IDoneList {
 
 export const DonesList: React.FC<IDoneList> = ({ dones, handleUndo, handleArchive, handleArchiveAll }) => {
   const [mounted, setMounted] = useState(false);
+  const [message, setMessage] = useState({
+    subtitle: "",
+  });
+  const [showMessage, setShowMessage] = useState(false);
 
   useEffect(() => {
+    const completedEmptyMessages = [
+      {
+        subtitle: "Your first win is just one task away.",
+      },
+      {
+        subtitle: "Every list starts with one finished task.",
+      },
+      {
+        subtitle: "Complete something small — momentum matters.",
+      },
+      {
+        subtitle: "Progress will show up here.",
+      },
+    ];
+
     React.startTransition(() => {
       setMounted(true);
+      setMessage(completedEmptyMessages[Math.floor(Math.random() * completedEmptyMessages.length)]);
+      setTimeout(() => setShowMessage(true), 100);
     });
   }, []);
 
@@ -47,7 +68,7 @@ export const DonesList: React.FC<IDoneList> = ({ dones, handleUndo, handleArchiv
   const hiddenCount = dones.length - visibleDones.length;
 
   return (
-    <Card className="w-full md:w-1/2 flex flex-col min-h-65 max-h-65 md:min-h-110 md:max-h-110 shadow-md border-2 transition-all hover:shadow-lg">
+    <Card className="w-full md:w-1/2 flex flex-col min-h-65 max-h-65 md:min-h-110 md:max-h-110 shadow-md border-2 transition-all hover:shadow-lg bg-gradient-to-br from-black to-gray-900">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-2xl md:text-2xl font-semibold flex items-center gap-2">
@@ -65,7 +86,7 @@ export const DonesList: React.FC<IDoneList> = ({ dones, handleUndo, handleArchiv
                 <Button
                   variant="outline"
                   size="sm"
-                  className="gap-1 text-xs"
+                  className="gap-1 text-xs hover:bg-white/10"
                   aria-label="Archive all completed tasks"
                 >
                   <Archive className="h-3.5 w-3.5" />
@@ -116,8 +137,8 @@ export const DonesList: React.FC<IDoneList> = ({ dones, handleUndo, handleArchiv
                 <Button
                   onClick={() => handleUndo(actualIndex)}
                   size="sm"
-                  variant="secondary"
-                  className="gap-1"
+                  variant="outline"
+                  className="gap-1 hover:bg-white/10"
                   aria-label="Undo task completion"
                   title="Move back to active tasks"
                 >
@@ -128,7 +149,7 @@ export const DonesList: React.FC<IDoneList> = ({ dones, handleUndo, handleArchiv
                   onClick={() => handleArchive(actualIndex)}
                   size="sm"
                   variant="outline"
-                  className="gap-1"
+                  className="gap-1 hover:bg-white/10"
                   aria-label="Archive task"
                   title="Archive this task"
                 >
@@ -143,7 +164,7 @@ export const DonesList: React.FC<IDoneList> = ({ dones, handleUndo, handleArchiv
     : (
       <CardContent className="flex flex-col items-center justify-center py-12 text-center">
         <p className="text-muted-foreground text-lg">No completed tasks yet</p>
-        <p className="text-sm text-muted-foreground mt-1">Complete your first task!</p>
+        <p className={`text-sm text-muted-foreground mt-1 transition-opacity duration-500 ${showMessage ? 'opacity-100' : 'opacity-0'}`}>{message.subtitle}</p>
       </CardContent>
     )}
      

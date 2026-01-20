@@ -40,17 +40,38 @@ export const TasksHistory: React.FC<ITasksHistory> = ({
   handleReUseButton,
 }) => {
   const [mounted, setMounted] = useState(false);
+  const [message, setMessage] = useState({
+    subtitle: "",
+  });
+  const [showMessage, setShowMessage] = useState(false);
 
   useEffect(() => {
+    const historyEmptyMessages = [
+      {
+        subtitle: "Deleted tasks will show up here.",
+      },
+      {
+        subtitle: "Nothing deleted so far.",
+      },
+      {
+        subtitle: "This is your safety net — just in case.",
+      },
+      {
+        subtitle: "Accidental deletes? They'll appear here.",
+      },
+    ];
+
     React.startTransition(() => {
       setMounted(true);
+      setMessage(historyEmptyMessages[Math.floor(Math.random() * historyEmptyMessages.length)]);
+      setTimeout(() => setShowMessage(true), 100);
     });
   }, []);
 
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline" size="lg" className="gap-2 hover:bg-white/10" aria-label="Open task history">
+        <Button variant="outline" size="lg" className="gap-2" aria-label="Open task history">
           <History className="h-5 w-5" />
           History
           {mounted && latestHistoryTasks.length > 0 && (
@@ -60,7 +81,7 @@ export const TasksHistory: React.FC<ITasksHistory> = ({
           )}
         </Button>
       </SheetTrigger>
-      <SheetContent className="max-h-screen w-full sm:max-w-lg bg-black">
+      <SheetContent className="max-h-screen w-full sm:max-w-lg bg-gradient-to-br from-black to-gray-900">
         <SheetHeader>
           <SheetTitle>Task History</SheetTitle>
           <SheetDescription>
@@ -77,15 +98,15 @@ export const TasksHistory: React.FC<ITasksHistory> = ({
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button
-                      variant="destructive"
+                      variant="outline"
                       size="sm"
-                      className="w-full bg-black/50 dark:bg-white text-white dark:text-black hover:bg-black/70 dark:hover:bg-white/90"
+                      className="w-full bg-white text-black hover:bg-red-600/50 hover:text-white transition-colors duration-300 ease-in-out"
                       aria-label="Clear all task history"
                     >
                       Clear All History
                     </Button>
                   </AlertDialogTrigger>
-                  <AlertDialogContent className="bg-black text-white hover:bg-black/90 z-9999">
+                  <AlertDialogContent className="bg-gradient-to-br from-black to-gray-900 text-white hover:bg-black/90 z-9999">
                     <AlertDialogHeader>
                       <AlertDialogTitle>Clear All History?</AlertDialogTitle>
                       <AlertDialogDescription>
@@ -96,7 +117,7 @@ export const TasksHistory: React.FC<ITasksHistory> = ({
                       <AlertDialogCancel className="hover:opacity-80" >Cancel</AlertDialogCancel>
                       <AlertDialogAction 
                         onClick={handleClearHistory}
-                        className="bg-white text-black hover:bg-white/80"
+                        className="bg-white text-black hover:bg-red-600/50 hover:text-white"
                       >
                         Clear All
                       </AlertDialogAction>
@@ -117,8 +138,8 @@ export const TasksHistory: React.FC<ITasksHistory> = ({
                       <Button
                         onClick={(e) => handleReUseButton(index)}
                         size="sm"
-                        variant="outline"
-                        className="ml-3 gap-2 shrink-0 hover:bg-white hover:text-black"
+                        variant="secondary"
+                        className="ml-3 gap-2 shrink-0"
                         aria-label="Restore task from history"
                       >
                         <RotateCcw className="h-4 w-4" />
@@ -134,9 +155,7 @@ export const TasksHistory: React.FC<ITasksHistory> = ({
             <CardContent className="px-0 py-12 text-center">
               <History className="h-12 w-12 mx-auto text-muted-foreground opacity-50" />
               <p className="text-muted-foreground text-lg mt-4">No history yet</p>
-              <p className="text-sm text-muted-foreground mt-1">
-                Deleted tasks will appear here
-              </p>
+              <p className={`text-sm text-muted-foreground mt-1 transition-opacity duration-500 ${showMessage ? 'opacity-100' : 'opacity-0'}`}>{message.subtitle}</p>
             </CardContent>
           )}
         </Card>
