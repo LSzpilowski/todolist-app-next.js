@@ -67,7 +67,7 @@ export const TemplateSheet: React.FC = () => {
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline" size="lg" className="gap-2" aria-label="Open templates">
+        <Button variant="outline" size="lg" className="gap-2 hover:bg-white/10" aria-label="Open templates">
           <FileText className="h-5 w-5" />
           Templates
           {mounted && templates.length > 0 && (
@@ -121,8 +121,8 @@ export const TemplateSheet: React.FC = () => {
                         <Button
                           onClick={() => handleUseTemplate(template.id)}
                           size="sm"
-                          variant="secondary"
-                          className="gap-1"
+                          variant="outline"
+                          className="gap-1 hover:bg-white hover:text-black"
                           aria-label="Use template"
                         >
                           <RotateCcw className="h-4 w-4" />
@@ -133,7 +133,7 @@ export const TemplateSheet: React.FC = () => {
                             <Button
                               size="sm"
                               variant="outline"
-                              className="gap-1 hover:bg-destructive hover:text-destructive-foreground"
+                              className="gap-1 hover:bg-white hover:text-black"
                               aria-label="Remove template"
                             >
                               <Trash2 className="h-4 w-4" />

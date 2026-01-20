@@ -25,7 +25,7 @@ export function AuthSheet() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" className='hover:bg-white/10'>
           Log in
         </Button>
       </SheetTrigger>

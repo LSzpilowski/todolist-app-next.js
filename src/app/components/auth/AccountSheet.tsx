@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { User, TrendingUp, CheckCircle, ListTodo, Archive, FileText, Calendar, LogOut, Trash2 } from "lucide-react";
+import { User, TrendingUp, CheckCircle, ListTodo, Archive, FileText, Calendar, LogOut, Trash2, Download } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -24,12 +24,14 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useAuthStore } from "@/store/authStore";
 import { useTasksStore } from "@/store/tasksStore";
+import { supabase } from "@/lib/supabase";
 
 export const AccountSheet: React.FC = () => {
   const { user, signOut, deleteAccount } = useAuthStore();
-  const { getStats } = useTasksStore();
+  const { getStats, tasks } = useTasksStore();
   const [mounted, setMounted] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [timePeriod, setTimePeriod] = useState<'month' | 'year'>('month');
 
   useEffect(() => {
     React.startTransition(() => {
@@ -45,7 +47,49 @@ export const AccountSheet: React.FC = () => {
       alert(`Error deleting account: ${error.message}`);
       setIsDeleting(false);
     }
-    // If successful, user will be signed out and redirected
+  };
+
+  const handleExportData = async () => {
+    if (!user) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('tasks')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: true });
+
+      if (error) {
+        alert('Error fetching data for export');
+        console.error(error);
+        return;
+      }
+
+      const exportData = {
+        user: {
+          id: user.id,
+          email: user.email,
+          created_at: user.created_at,
+        },
+        tasks: data || [],
+        statistics: stats,
+        exported_at: new Date().toISOString(),
+      };
+
+      const jsonString = JSON.stringify(exportData, null, 2);
+      const blob = new Blob([jsonString], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `doitly-data-export-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      alert('Error exporting data');
+      console.error(error);
+    }
   };
 
   const stats = mounted ? getStats() : {
@@ -80,7 +124,7 @@ export const AccountSheet: React.FC = () => {
         <div className="mt-6 space-y-6">
           {/* User Info */}
           <Card className="border-2">
-            <CardHeader className="pb-3">
+            <CardHeader className="py-3">
               <div className="flex items-center gap-3">
                 {user.user_metadata?.avatar_url ? (
                   <Image 
@@ -103,6 +147,16 @@ export const AccountSheet: React.FC = () => {
                     {user.email}
                   </p>
                 </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportData}
+                  className="gap-2 shrink-0 hover:bg-white/10"
+                  title="Export your data (GDPR)"
+                >
+                  <Download className="h-4 w-4" />
+                  Export Data
+                </Button>
               </div>
             </CardHeader>
           </Card>
@@ -207,29 +261,65 @@ export const AccountSheet: React.FC = () => {
               </Card>
             )}
 
-            {/* Monthly Stats */}
+            {/* Monthly/Yearly Stats */}
             {stats.monthlyTasksCreated && Object.keys(stats.monthlyTasksCreated).length > 0 && (
               <Card className="border-2">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-base">This Month</CardTitle>
+                <CardHeader className="pb-3 flex flex-row items-center justify-between">
+                  <div className="flex gap-2">
+                    <Button
+                      variant='outline'
+                      size="sm"
+                      onClick={() => setTimePeriod('month')}
+                      className={timePeriod === 'year' ? 'hover:bg-white/10' :'bg-white text-black'}
+                    >
+                      This Month
+                    </Button>
+                    <Button
+                      variant='outline'
+                      size="sm"
+                      onClick={() => setTimePeriod('year')}
+                      className={timePeriod === 'year' ? 'bg-white text-black' : 'hover:bg-white/10'}
+                    >
+                      This Year
+                    </Button>
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-sm text-muted-foreground">Created</p>
-                      <p className="text-2xl font-bold">
-                        {Object.values(stats.monthlyTasksCreated)[0] || 0}
-                      </p>
-                    </div>
-                    {stats.monthlyTasksCompleted && (
+                  {timePeriod === 'month' ? (
+                    <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-sm text-muted-foreground">Completed</p>
+                        <p className="text-sm text-muted-foreground">Created</p>
                         <p className="text-2xl font-bold">
-                          {Object.values(stats.monthlyTasksCompleted)[0] || 0}
+                          {Object.values(stats.monthlyTasksCreated)[0] || 0}
                         </p>
                       </div>
-                    )}
-                  </div>
+                      {stats.monthlyTasksCompleted && (
+                        <div>
+                          <p className="text-sm text-muted-foreground">Completed</p>
+                          <p className="text-2xl font-bold">
+                            {Object.values(stats.monthlyTasksCompleted)[0] || 0}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Created</p>
+                        <p className="text-2xl font-bold">
+                          {Object.values(stats.monthlyTasksCreated).reduce((a, b) => a + b, 0)}
+                        </p>
+                      </div>
+                      {stats.monthlyTasksCompleted && (
+                        <div>
+                          <p className="text-sm text-muted-foreground">Completed</p>
+                          <p className="text-2xl font-bold">
+                            {Object.values(stats.monthlyTasksCompleted).reduce((a, b) => a + b, 0)}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             )}
@@ -241,7 +331,7 @@ export const AccountSheet: React.FC = () => {
             <Button 
               onClick={signOut} 
               variant="outline" 
-              className="w-full gap-2"
+              className="w-full gap-2 hover:bg-white/10"
               size="lg"
             >
               <LogOut className="h-4 w-4" />
@@ -253,7 +343,7 @@ export const AccountSheet: React.FC = () => {
               <AlertDialogTrigger asChild>
                 <Button 
                   variant="destructive" 
-                  className="w-full gap-2"
+                  className="w-full gap-2 hover:bg-red-600/50"
                   size="lg"
                 >
                   <Trash2 className="h-4 w-4" />
@@ -286,11 +376,11 @@ export const AccountSheet: React.FC = () => {
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogCancel className="hover:bg-white/10">Cancel</AlertDialogCancel>
                   <AlertDialogAction
                     onClick={handleDeleteAccount}
                     disabled={isDeleting}
-                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    className="bg-destructive text-destructive-foreground  hover:bg-red-600/50"
                   >
                     {isDeleting ? 'Deleting...' : 'Yes, delete my account'}
                   </AlertDialogAction>
