@@ -5,7 +5,6 @@ import { AuthProvider } from "./components/auth/AuthProvider";
 import { TasksProvider } from "./components/tasks/TasksProvider";
 import { SignInReminder } from "./components/tasks/MigrationDialog";
 import { SupabaseStatus } from "./components/SupabaseStatus";
-import { Toaster } from "sonner";
 import "@/styles/globals.css"
 import { fontSans } from "@/lib/fonts";
 
@@ -34,7 +33,6 @@ export default function RootLayout({
               <SignInReminder />
               <SupabaseStatus />
               {children}
-              <Toaster position="bottom-right" richColors closeButton />
             </TasksProvider>
           </AuthProvider>
         </ThemeProvider>

@@ -24,7 +24,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useTasksStore } from "@/store/tasksStore";
 import { useAuthStore } from "@/store/authStore";
-import { toast } from "sonner";
 
 export const TemplateSheet: React.FC = () => {
   const { user } = useAuthStore();
@@ -32,10 +31,31 @@ export const TemplateSheet: React.FC = () => {
   const [mounted, setMounted] = useState(false);
   const [templateInput, setTemplateInput] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [message, setMessage] = useState({
+    subtitle: "",
+  });
+  const [showMessage, setShowMessage] = useState(false);
 
   useEffect(() => {
+    const templateEmptyMessages = [
+      {
+        subtitle: "Save tasks you often reuse.",
+      },
+      {
+        subtitle: "Templates help you move faster later.",
+      },
+      {
+        subtitle: "Turn repeating tasks into one-click actions.",
+      },
+      {
+        subtitle: "Create once, reuse anytime.",
+      },
+    ];
+
     React.startTransition(() => {
       setMounted(true);
+      setMessage(templateEmptyMessages[Math.floor(Math.random() * templateEmptyMessages.length)]);
+      setTimeout(() => setShowMessage(true), 100);
     });
   }, []);
 
@@ -47,21 +67,16 @@ export const TemplateSheet: React.FC = () => {
     if (trimmedInput.length >= 3) {
       await tasksStore.createTemplate(trimmedInput, user?.id);
       setTemplateInput("");
-      toast.success("Template created!");
-    } else {
-      toast.error("Template must be at least 3 characters long");
     }
   };
 
   const handleUseTemplate = async (templateId: string) => {
     await tasksStore.useTemplate(templateId, user?.id);
     setIsOpen(false);
-    toast.success("Task created from template!");
   };
 
   const handleRemoveTemplate = async (templateId: string) => {
     await tasksStore.removeTemplate(templateId, user?.id);
-    toast.info("Template removed");
   };
 
   return (
@@ -77,7 +92,7 @@ export const TemplateSheet: React.FC = () => {
           )}
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="max-h-screen w-full sm:max-w-lg bg-black">
+      <SheetContent side="left" className="max-h-screen w-full sm:max-w-lg bg-gradient-to-br from-black to-gray-900">
         <SheetHeader>
           <SheetTitle>Task Templates</SheetTitle>
           <SheetDescription>
@@ -122,7 +137,7 @@ export const TemplateSheet: React.FC = () => {
                           onClick={() => handleUseTemplate(template.id)}
                           size="sm"
                           variant="outline"
-                          className="gap-1 hover:bg-white hover:text-black"
+                          className="gap-1 hover:bg-white/10"
                           aria-label="Use template"
                         >
                           <RotateCcw className="h-4 w-4" />
@@ -133,7 +148,7 @@ export const TemplateSheet: React.FC = () => {
                             <Button
                               size="sm"
                               variant="outline"
-                              className="gap-1 hover:bg-white hover:text-black"
+                              className="gap-1 hover:bg-white/10"
                               aria-label="Remove template"
                             >
                               <Trash2 className="h-4 w-4" />
@@ -147,10 +162,10 @@ export const TemplateSheet: React.FC = () => {
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogCancel className="hover:bg-white/10">Cancel</AlertDialogCancel>
                               <AlertDialogAction
                                 onClick={() => handleRemoveTemplate(template.id)}
-                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                className="hover:bg-red-600/50 text-white border-1 "
                               >
                                 Remove
                               </AlertDialogAction>
@@ -167,9 +182,7 @@ export const TemplateSheet: React.FC = () => {
             <div className="py-12 text-center">
               <FileText className="h-12 w-12 mx-auto text-muted-foreground opacity-50" />
               <p className="text-muted-foreground text-lg mt-4">No templates yet</p>
-              <p className="text-sm text-muted-foreground mt-1">
-                Create a template above to get started!
-              </p>
+              <p className={`text-sm text-muted-foreground mt-1 transition-opacity duration-500 ${showMessage ? 'opacity-100' : 'opacity-0'}`}>{message.subtitle}</p>
             </div>
           )}
         </div>

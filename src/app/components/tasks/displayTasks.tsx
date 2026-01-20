@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { AddTasks } from "./displayTasks/addTasks";
 import { TodosList } from "./displayTasks/todoList";
 import { DonesList } from "./displayTasks/doneList";
-import { toast } from "sonner";
 import { useTasksStore } from "@/store/tasksStore";
 import { useAuthStore } from "@/store/authStore";
 import { TasksHistory } from "./displayTasks/tasksHistory";
@@ -62,44 +61,31 @@ export const DisplayTasks: React.FC = () => {
     if (trimmedInput.length >= 3) {
       await addTask(trimmedInput, user?.id);
       setInputValue("");
-      toast.success("Task added successfully!");
-      if (activeTasks.length >= 7) {
-        toast.info("You're doing great planning ahead! Consider completing a few tasks first to stay focused.", {
-          duration: 5000,
-        });
-      }
-    } else {
-      toast.error("Task must be at least 3 characters long");
     }
   }
 
   async function handleDelete(index: number) {
     const task = activeTasks[index];
     await deleteTask(task.id, user?.id);
-    toast.info("Task moved to history");
   }
 
   async function handleDone(index: number) {
     const task = activeTasks[index];
     await markAsCompleted(task.id, user?.id);
-    toast.success("Task completed!");
   }
 
   async function handleUndo(index: number) {
     const doneTask = completedTasks[index];
     await undoTask(doneTask.id, user?.id);
-    toast.info("Task restored to active list");
   }
 
   async function handleArchive(index: number) {
     const task = completedTasks[index];
     await archiveTask(task.id, user?.id);
-    toast.info("Task archived");
   }
 
   async function handleArchiveAll() {
     await archiveAllCompleted(user?.id);
-    toast.success("All completed tasks archived");
   }
 
   async function handleReUseButton(index: number) {
@@ -107,17 +93,12 @@ export const DisplayTasks: React.FC = () => {
     const last10 = deletedTasksList.slice(-10);
     const task = last10[index];
     if (task) {
-      console.log('Restoring task from history:', task);
       await undoTask(task.id, user?.id);
-      toast.success("Task restored from history");
-    } else {
-      console.error('Task not found at index:', index);
     }
   }
 
   function handleClearHistory() {
     clearHistory(user?.id);
-    toast.success("History cleared");
   }
 
   async function handleEditStart(index: number) {
@@ -135,7 +116,6 @@ export const DisplayTasks: React.FC = () => {
       const task = activeTasks[editingIndex];
       await updateTask(task.id, editingText, user?.id);
       handleEditCancel();
-      toast.success("Task updated successfully");
     }
   }
 

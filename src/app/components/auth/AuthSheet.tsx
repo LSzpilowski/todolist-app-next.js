@@ -29,7 +29,7 @@ export function AuthSheet() {
           Log in
         </Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className='bg-gradient-to-br from-black to-gray-900'>
         <SheetHeader>
           <SheetTitle>Welcome to DoItly</SheetTitle>
           <SheetDescription>
