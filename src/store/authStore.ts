@@ -15,6 +15,7 @@ interface AuthState {
   
   signInWithProvider: (provider: 'google' | 'github') => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
+  deleteAccount: () => Promise<{ error: Error | null }>;
   initialize: () => Promise<void>;
 }
 
@@ -44,6 +45,38 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ loading: true });
     await supabase.auth.signOut();
     set({ user: null, session: null, loading: false });
+  },
+
+  deleteAccount: async () => {
+    const { user } = get();
+    if (!user) {
+      return { error: new Error('No user logged in') };
+    }
+
+    try {
+      set({ loading: true });
+
+      // Call the Supabase function to delete user account and all data
+      const { data, error } = await supabase.rpc('delete_user_account');
+
+      if (error) {
+        throw new Error(`Failed to delete account: ${error.message}`);
+      }
+
+      // Check if the function returned success
+      if (data && !data.success) {
+        throw new Error(data.error || 'Failed to delete account');
+      }
+
+      // Sign out after successful deletion
+      await supabase.auth.signOut();
+      set({ user: null, session: null, loading: false });
+      
+      return { error: null };
+    } catch (error) {
+      set({ loading: false });
+      return { error: error as Error };
+    }
   },
 
   initialize: async () => {

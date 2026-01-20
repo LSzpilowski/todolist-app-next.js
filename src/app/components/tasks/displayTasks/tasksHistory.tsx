@@ -50,7 +50,7 @@ export const TasksHistory: React.FC<ITasksHistory> = ({
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline" size="lg" className="gap-2" aria-label="Open task history">
+        <Button variant="outline" size="lg" className="gap-2 hover:bg-white/10" aria-label="Open task history">
           <History className="h-5 w-5" />
           History
           {mounted && latestHistoryTasks.length > 0 && (
@@ -117,8 +117,8 @@ export const TasksHistory: React.FC<ITasksHistory> = ({
                       <Button
                         onClick={(e) => handleReUseButton(index)}
                         size="sm"
-                        variant="secondary"
-                        className="ml-3 gap-2 shrink-0"
+                        variant="outline"
+                        className="ml-3 gap-2 shrink-0 hover:bg-white hover:text-black"
                         aria-label="Restore task from history"
                       >
                         <RotateCcw className="h-4 w-4" />

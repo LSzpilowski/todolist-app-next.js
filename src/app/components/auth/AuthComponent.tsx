@@ -5,6 +5,8 @@ import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FaGithub, FaGoogle } from 'react-icons/fa';
+import { PrivacyPolicyModal } from '../legal/PrivacyPolicyModal';
+import { GDPRModal } from '../legal/GDPRModal';
 
 export function AuthComponent() {
   const { user, loading, signInWithProvider, signOut } = useAuthStore();
@@ -78,7 +80,7 @@ export function AuthComponent() {
         <Button 
           onClick={handleGoogleSignIn}
           variant="outline" 
-          className="w-full gap-2"
+          className="w-full gap-2 hover:bg-white/10"
         >
           <FaGoogle className="w-5 h-5" />
           Continue with Google
@@ -86,11 +88,25 @@ export function AuthComponent() {
         <Button 
           onClick={handleGithubSignIn}
           variant="outline" 
-          className="w-full gap-2"
+          className="w-full gap-2 hover:bg-white/10"
         >
           <FaGithub className="w-5 h-5" />
           Continue with GitHub
         </Button>
+        <p className="text-xs text-center text-muted-foreground pt-2">
+          By signing in, you accept our{' '}
+          <PrivacyPolicyModal>
+            <button className="text-primary hover:underline">
+              privacy policy
+            </button>
+          </PrivacyPolicyModal>
+          {' '}and data processing under{' '}
+          <GDPRModal>
+            <button className="text-primary hover:underline transition-all">
+              GDPR
+            </button>
+          </GDPRModal>.
+        </p>
       </CardContent>
     </Card>
   );
