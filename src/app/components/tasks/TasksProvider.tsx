@@ -9,13 +9,16 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
   const { loadTasks } = useTasksStore();
 
   useEffect(() => {
-    if (!initialized) return;
+    if (!initialized) {
+
+      return;
+    }
 
     if (user) {
-      // Always load from Supabase when logged in
+
       loadTasks(user.id);
     } else {
-      // Always load from localStorage when guest
+
       loadTasks();
     }
   }, [user, initialized, loadTasks]);

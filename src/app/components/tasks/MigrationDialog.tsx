@@ -15,34 +15,34 @@ import {
 } from '@/components/ui/alert-dialog';
 
 const REMINDER_DISMISSED_KEY = 'doitly_reminder_dismissed';
-const TASK_THRESHOLD = 3; // Show reminder after 3+ tasks
+const TASK_THRESHOLD = 3;
 
 export function SignInReminder() {
   const [open, setOpen] = useState(false);
   const { user } = useAuthStore();
-  const { tasks, doneTasks } = useTasksStore();
+  const { getActiveTasks, getCompletedTasks } = useTasksStore();
 
   useEffect(() => {
-    // Don't show if already logged in
     if (user) return;
 
-    // Check if user already dismissed the reminder
     const dismissed = localStorage.getItem(REMINDER_DISMISSED_KEY);
     if (dismissed) return;
 
-    // Count total tasks (active + done)
-    const totalTasks = tasks.length + doneTasks.length;
+    const activeTasks = getActiveTasks();
+    const completedTasks = getCompletedTasks();
+    const totalTasks = activeTasks.length + completedTasks.length;
 
-    // Show reminder if user has 3 or more tasks
     if (totalTasks >= TASK_THRESHOLD) {
       setTimeout(() => setOpen(true), 500);
     }
-  }, [user, tasks.length, doneTasks.length]);
+  }, [user, getActiveTasks, getCompletedTasks]);
 
   const handleDismiss = () => {
     localStorage.setItem(REMINDER_DISMISSED_KEY, 'true');
     setOpen(false);
   };
+
+  const totalTasks = getActiveTasks().length + getCompletedTasks().length;
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
@@ -51,7 +51,7 @@ export function SignInReminder() {
           <AlertDialogTitle>Keep your tasks safe! 🔒</AlertDialogTitle>
           <AlertDialogDescription className="space-y-2">
             <span className="block">
-              You&apos;ve created {tasks.length + doneTasks.length} tasks! 
+              You&apos;ve created {totalTasks} tasks! 
               It would be a pity to lose your progress.
             </span>
             <span className="block font-medium">
