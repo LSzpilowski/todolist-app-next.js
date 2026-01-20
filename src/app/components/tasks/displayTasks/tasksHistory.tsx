@@ -23,7 +23,9 @@ import {
 } from "@/components/ui/alert-dialog";
 
 interface ITask {
+  id: string;
   text: string;
+  isChecked: boolean;
 }
 
 interface ITasksHistory {
@@ -46,16 +48,16 @@ export const TasksHistory: React.FC<ITasksHistory> = ({
   }, []);
 
   return (
-    <>
-    {mounted && latestHistoryTasks.length > 0 ? 
-      <Sheet>
+    <Sheet>
       <SheetTrigger asChild>
         <Button variant="outline" size="lg" className="gap-2" aria-label="Open task history">
           <History className="h-5 w-5" />
           History
-          <span className="text-xs bg-primary text-primary-foreground rounded-full px-2 py-0.5">
-            {latestHistoryTasks.length}
-          </span>
+          {mounted && latestHistoryTasks.length > 0 && (
+            <span className="text-xs bg-primary text-primary-foreground rounded-full px-2 py-0.5">
+              {latestHistoryTasks.length}
+            </span>
+          )}
         </Button>
       </SheetTrigger>
       <SheetContent className="max-h-screen w-full sm:max-w-lg bg-black">
@@ -69,9 +71,9 @@ export const TasksHistory: React.FC<ITasksHistory> = ({
           </p>
         </SheetHeader>
         <Card className="flex flex-col h-full border-0 shadow-none mt-6">
-          <CardHeader className="px-0 pt-0">
-            <CardTitle className="flex flex-col items-center justify-between gap-4">
-              {latestHistoryTasks.length > 0 && (
+          {latestHistoryTasks.length > 0 && (
+            <CardHeader className="px-0 pt-0">
+              <CardTitle className="flex flex-col items-center justify-between gap-4">
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button
@@ -101,10 +103,10 @@ export const TasksHistory: React.FC<ITasksHistory> = ({
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
-              )}
-            </CardTitle>
-          </CardHeader>
-          {latestHistoryTasks.length > 0 ? 
+              </CardTitle>
+            </CardHeader>
+          )}
+          {latestHistoryTasks.length > 0 ? (
              <CardContent className="px-0 overflow-y-auto">
             {latestHistoryTasks.length > 0 && (
               <ul className="flex flex-col gap-2">
@@ -128,11 +130,17 @@ export const TasksHistory: React.FC<ITasksHistory> = ({
               </ul>
             )}
           </CardContent>
-          : null}
+          ) : (
+            <CardContent className="px-0 py-12 text-center">
+              <History className="h-12 w-12 mx-auto text-muted-foreground opacity-50" />
+              <p className="text-muted-foreground text-lg mt-4">No history yet</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Deleted tasks will appear here
+              </p>
+            </CardContent>
+          )}
         </Card>
       </SheetContent>
     </Sheet>
-      : <></>}
-      </>
   );
 };

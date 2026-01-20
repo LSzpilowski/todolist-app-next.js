@@ -1,35 +1,39 @@
 import React from "react";
-import { TasksHistory } from "./tasksHistory";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { TasksHistory } from "./tasksHistory";
+import { TemplateSheet } from "./templateSheet";
 
-interface ITask {
+interface Todo {
+  id: string;
   text: string;
+  isChecked: boolean;
 }
 
 interface IAddTasks {
   inputValue: string;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  latestHistoryTasks: ITask[];
+  historyTasks: Todo[];
   handleClearHistory: () => void;
-  handleReUseButton: (index: number) => void;
+  handleReUseButton: (index: number) => Promise<void>;
 }
 
 export const AddTasks = ({
   inputValue,
   handleChange,
   handleSubmit,
-  latestHistoryTasks,
+  historyTasks,
   handleClearHistory,
   handleReUseButton,
 }: IAddTasks) => {
   return (
     <Card className="flex flex-row justify-center items-center gap-3 md:gap-4 py-4 px-4 md:px-6 border-2 shadow-lg">
-      <div className="hidden md:block">
+      <div className="hidden md:flex items-center gap-3">
+        <TemplateSheet />
         <TasksHistory
-          latestHistoryTasks={latestHistoryTasks}
+          latestHistoryTasks={historyTasks}
           handleClearHistory={handleClearHistory}
           handleReUseButton={handleReUseButton}
         />
