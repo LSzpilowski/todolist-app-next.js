@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { User, TrendingUp, CheckCircle, ListTodo, Archive, FileText, Calendar, LogOut } from "lucide-react";
+import { User, TrendingUp, CheckCircle, ListTodo, Archive, FileText, Calendar, LogOut, Trash2 } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -11,19 +11,42 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { useAuthStore } from "@/store/authStore";
 import { useTasksStore } from "@/store/tasksStore";
 
 export const AccountSheet: React.FC = () => {
-  const { user, signOut } = useAuthStore();
+  const { user, signOut, deleteAccount } = useAuthStore();
   const { getStats } = useTasksStore();
   const [mounted, setMounted] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     React.startTransition(() => {
       setMounted(true);
     });
   }, []);
+
+  const handleDeleteAccount = async () => {
+    setIsDeleting(true);
+    const { error } = await deleteAccount();
+    
+    if (error) {
+      alert(`Error deleting account: ${error.message}`);
+      setIsDeleting(false);
+    }
+    // If successful, user will be signed out and redirected
+  };
 
   const stats = mounted ? getStats() : {
     totalTasksCreated: 0,
@@ -212,16 +235,69 @@ export const AccountSheet: React.FC = () => {
             )}
           </div>
 
-          {/* Sign Out Button */}
-          <Button 
-            onClick={signOut} 
-            variant="outline" 
-            className="w-full gap-2"
-            size="lg"
-          >
-            <LogOut className="h-4 w-4" />
-            Log Out
-          </Button>
+          {/* Action Buttons */}
+          <div className="space-y-2">
+            {/* Sign Out Button */}
+            <Button 
+              onClick={signOut} 
+              variant="outline" 
+              className="w-full gap-2"
+              size="lg"
+            >
+              <LogOut className="h-4 w-4" />
+              Log Out
+            </Button>
+
+            {/* Delete Account Button with Confirmation */}
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button 
+                  variant="destructive" 
+                  className="w-full gap-2"
+                  size="lg"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Delete Account
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription className="space-y-3">
+                    <p>
+                      This action cannot be undone. This will permanently delete your account and remove all your data from our servers.
+                    </p>
+                    <div>
+                      <p className="font-semibold text-foreground mb-2">
+                        The following will be permanently deleted:
+                      </p>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>{stats.activeTasksCount} active task{stats.activeTasksCount !== 1 ? 's' : ''}</li>
+                        <li>{stats.completedTasksCount} completed task{stats.completedTasksCount !== 1 ? 's' : ''}</li>
+                        <li>{stats.archivedTasksCount} archived task{stats.archivedTasksCount !== 1 ? 's' : ''}</li>
+                        <li>{stats.templatesCount} template{stats.templatesCount !== 1 ? 's' : ''}</li>
+                        <li>Your account information and email</li>
+                        <li>All statistics and history</li>
+                      </ul>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      This complies with GDPR &quot;Right to be Forgotten&quot; regulations and will be processed immediately.
+                    </p>
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleDeleteAccount}
+                    disabled={isDeleting}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    {isDeleting ? 'Deleting...' : 'Yes, delete my account'}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </div>
       </SheetContent>
     </Sheet>

@@ -5,6 +5,7 @@ import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FaGithub, FaGoogle } from 'react-icons/fa';
+import { PrivacyPolicyModal } from '../legal/PrivacyPolicyModal';
 
 export function AuthComponent() {
   const { user, loading, signInWithProvider, signOut } = useAuthStore();
@@ -91,6 +92,15 @@ export function AuthComponent() {
           <FaGithub className="w-5 h-5" />
           Continue with GitHub
         </Button>
+        <p className="text-xs text-center text-muted-foreground pt-2">
+          By signing in, you accept our{' '}
+          <PrivacyPolicyModal>
+            <button className="text-primary hover:underline">
+              privacy policy
+            </button>
+          </PrivacyPolicyModal>
+          {' '}and data processing under GDPR.
+        </p>
       </CardContent>
     </Card>
   );
