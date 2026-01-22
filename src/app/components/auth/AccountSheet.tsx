@@ -290,14 +290,14 @@ export const AccountSheet: React.FC = () => {
                       <div>
                         <p className="text-sm text-muted-foreground">Created</p>
                         <p className="text-2xl font-bold">
-                          {Object.values(stats.monthlyTasksCreated)[0] || 0}
+                          {(Object.values(stats.monthlyTasksCreated)[0] as number) || 0}
                         </p>
                       </div>
                       {stats.monthlyTasksCompleted && (
                         <div>
                           <p className="text-sm text-muted-foreground">Completed</p>
                           <p className="text-2xl font-bold">
-                            {Object.values(stats.monthlyTasksCompleted)[0] || 0}
+                            {(Object.values(stats.monthlyTasksCompleted)[0] as number) || 0}
                           </p>
                         </div>
                       )}
@@ -307,14 +307,14 @@ export const AccountSheet: React.FC = () => {
                       <div>
                         <p className="text-sm text-muted-foreground">Created</p>
                         <p className="text-2xl font-bold">
-                          {Object.values(stats.monthlyTasksCreated).reduce((a, b) => a + b, 0)}
+                          {Object.values(stats.monthlyTasksCreated).reduce((a: number, b: number) => a + b, 0)}
                         </p>
                       </div>
                       {stats.monthlyTasksCompleted && (
                         <div>
                           <p className="text-sm text-muted-foreground">Completed</p>
                           <p className="text-2xl font-bold">
-                            {Object.values(stats.monthlyTasksCompleted).reduce((a, b) => a + b, 0)}
+                            {Object.values(stats.monthlyTasksCompleted).reduce((a: number, b: number) => a + b, 0)}
                           </p>
                         </div>
                       )}
